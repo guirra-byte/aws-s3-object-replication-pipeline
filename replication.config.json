@@ -1,0 +1,24 @@
+{
+  "replicationConfig": {
+    "enabled": true,
+    "targets": [
+      {
+        "bucket": "replica-a",
+        "region": "us-east-1"
+      },
+      {
+        "bucket": "replica-b",
+        "region": "us-west-2"
+      }
+    ],
+    "latency": {
+      "enabled": true
+    },
+    "retry": {
+      "maxAttempts": 3
+    },
+    "notifications": {
+      "email": true
+    }
+  }
+}

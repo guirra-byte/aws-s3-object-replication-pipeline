@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model MainBucket {
+  id     String @id @default(nanoid())
+  name   String @unique
+  region String
+
+  objects S3ObjectRef[]
+
+  @@map("main_bucket")
+}
+
+model S3ObjectRef {
+  id  String @id @default(nanoid())
+  key String @unique
+
+  createdAt  DateTime  @default(now()) @map("created_at")
+  uploadedAt DateTime? @updatedAt @map("uploaded_at")
+
+  replications Replication[]
+
+  mainBucketId String?     @map("main_bucket_id")
+  mainBucket   MainBucket? @relation(fields: [mainBucketId], references: [id])
+
+  mainBucketDownloadLatencyMs String? @map("main_bucket_download_latency_ms")
+
+  @@map("s3_objects_references")
+}
+
+model Replication {
+  id     String            @id @default(nanoid())
+  status ReplicationStatus @default(PENDING)
+
+  retryAttempts    Int       @default(0) @map("retry_attempts")
+  retryExhaustedAt DateTime? @map("retry_exhausted_at")
+
+  downloadLatency  String?
+  lastLatencyCheck DateTime?
+
+  bucketId      String? @map("bucket_id")
+  s3ObjectRefId String
+
+  bucket   Bucket?     @relation(fields: [bucketId], references: [id])
+  refS3Key S3ObjectRef @relation(fields: [s3ObjectRefId], references: [id])
+
+  createdAt  DateTime  @default(now())
+  updateAt   DateTime  @updatedAt
+  finishedAt DateTime?
+
+  @@map("replications")
+}
+
+model Bucket {
+  id     String @id @default(nanoid())
+  name   String @unique
+  region String
+
+  replications Replication[]
+
+  @@map("buckets")
+}
+
+enum ReplicationStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
