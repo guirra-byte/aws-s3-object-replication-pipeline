@@ -6,6 +6,9 @@ O sistema utiliza o Amazon S3 como fonte de verdade dos arquivos e reage a event
 
 O objetivo é garantir consistência entre buckets, permitir retry controlado, DLQ, e reprocessamento assíncrono de objetos que falharam ou não foram replicados automaticamente.
 
+<img width="946" height="416" alt="image" src="https://github.com/user-attachments/assets/d5afcb8c-1aac-4232-a050-0d167d84c5bd" />
+
+
 ## O fluxo principal do sistema é event-driven:
 
 1. Um objeto é enviado para o bucket principal no Amazon S3.
@@ -45,4 +48,10 @@ O objetivo é garantir consistência entre buckets, permitir retry controlado, D
 | **EC2 Spot Instance**     | Reprocessamento batch em horários específicos                    | Infraestrutura efêmera para otimização de custos                                   |
 | **PostgreSQL**            | Persistência definitiva do estado de replicação                  | Consistência, auditoria e histórico                                                |
 
+
+##
+
+<p align="center">
+    <img src="https://www.aikonbox.com.br/icons?i=javascript,nodejs,rabbitmq,docker,aws&t=40" />
+</p>
 
